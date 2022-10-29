@@ -76,7 +76,7 @@ public class MatrixUtils {
         return new Matrix(result);
     }
 
-    private static double multiplyMatricesCell(Matrix firstMatrix, Matrix secondMatrix, int row, int col) {
+    public static double multiplyMatricesCell(Matrix firstMatrix, Matrix secondMatrix, int row, int col) {
         double cell = 0;
         for (int i = 0; i < secondMatrix.elements().length; i++) {
             cell += firstMatrix.elements()[row][i] * secondMatrix.elements()[i][col];
@@ -107,14 +107,14 @@ public class MatrixUtils {
     }
 
     public static Matrix sorted(Matrix matrix) {
-        double[][] elements = new double[matrix.elements().length][matrix.elements().length];
+        double[][] elements = new double[matrix.elements().length][matrix.elements()[0].length];
         System.arraycopy(matrix.elements(), 0, elements, 0, matrix.elements().length);
         Arrays.stream(elements).forEach(Arrays::sort);
         return new Matrix(elements);
     }
 
     public static Matrix matrixScalarMultiplication(Matrix matrix, double scalar) {
-        double[][] elements = new double[matrix.elements().length][matrix.elements().length];
+        double[][] elements = new double[matrix.elements().length][matrix.elements()[0].length];
         for (int i = 0; i < elements.length; i++) {
             for (int j = 0; j < elements[i].length; j++) {
                 elements[i][j] = matrix.elements()[i][j] * scalar;
