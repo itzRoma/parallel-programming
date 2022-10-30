@@ -42,7 +42,7 @@ public class Resources {
         sharedM = Double.MAX_VALUE;
     }
 
-    public synchronized double findMi(int threadNumber) {
+    public double findMi(int threadNumber) {
         int pos = (threadNumber - 1) * H;
         double mi = Z.getElement(pos);
         for (int i = pos; i < pos + H; i++) {
@@ -51,7 +51,7 @@ public class Resources {
         return mi;
     }
 
-    public synchronized void calculateMAH(int threadNumber, Matrix MDi, double di, double mi, double pi) {
+    public void calculateMAH(int threadNumber, Matrix MDi, double di, double mi, double pi) {
         int pos = (threadNumber - 1) * H;
         for (int i = 0; i < N; i++) {
             for (int j = pos; j < pos + H; j++) {

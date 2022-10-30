@@ -32,11 +32,16 @@ public class Lab1 {
 
     public static final Scanner sc = new Scanner(System.in);
 
-    public static void main(String[] args) {
-        System.out.print("Enter the size of the matrices and vectors: ");
-        final int N = sc.nextInt();
+    private static final int AMOUNT_OF_PROCESSORS = 4;
 
-        Resources resources = new Resources(N, 4);
+    public static void main(String[] args) {
+        int N;
+        do {
+            System.out.printf("%nEnter the size of the matrices and vectors: ");
+            N = sc.nextInt();
+        } while (!checkN(N));
+
+        Resources resources = new Resources(N, AMOUNT_OF_PROCESSORS);
 
         Thread T1 = new T1(resources);
         Thread T2 = new T2(resources);
@@ -60,5 +65,13 @@ public class Lab1 {
         }
 
         System.out.printf("%nAll threads finished%n");
+    }
+
+    private static boolean checkN(int N) {
+        if (N % AMOUNT_OF_PROCESSORS != 0) {
+            System.out.printf("N should be divisible by %d%n", AMOUNT_OF_PROCESSORS);
+            return false;
+        }
+        return true;
     }
 }
