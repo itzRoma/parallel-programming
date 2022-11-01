@@ -13,6 +13,9 @@ public class VectorUtils {
         SCANNER = new Scanner(System.in);
     }
 
+    private VectorUtils() {
+    }
+
     public static Vector scanVector(int vectorSize) {
         if (vectorSize > 0 && vectorSize <= 4) return scanVectorFromUser(vectorSize);
         if (vectorSize > 4) return chooseFillOption(vectorSize);
@@ -20,7 +23,7 @@ public class VectorUtils {
     }
 
     private static Vector chooseFillOption(int vectorSize) {
-        System.out.print("Choose an option to fill the vector (1 - value, 2 - random): ");
+        System.out.print("Choose the vector filling option (1 - value, 2 - random): ");
         switch (SCANNER.nextInt()) {
             case 1 -> {
                 return createVectorAndFillWithValue(vectorSize);
@@ -28,7 +31,7 @@ public class VectorUtils {
             case 2 -> {
                 return createVectorAndFillWithRandomValue(vectorSize);
             }
-            default -> throw new IllegalArgumentException("Invalid option provided");
+            default -> throw new IllegalArgumentException("Invalid vector filling option provided");
         }
     }
 
@@ -42,7 +45,7 @@ public class VectorUtils {
     }
 
     private static Vector createVectorAndFillWithValue(int vectorSize) {
-        System.out.print("Enter the value you want to fill vector with: ");
+        System.out.print("Enter the value you want to fill the vector with: ");
         double value = SCANNER.nextDouble();
 
         double[] elements = new double[vectorSize];
@@ -84,9 +87,5 @@ public class VectorUtils {
                         .mapToDouble(col -> row[col] * vector.elements()[col])
                         .sum()).toArray();
         return new Vector(elements);
-    }
-
-    public static double min(Vector vector) {
-        return Arrays.stream(vector.elements()).min().getAsDouble();
     }
 }
