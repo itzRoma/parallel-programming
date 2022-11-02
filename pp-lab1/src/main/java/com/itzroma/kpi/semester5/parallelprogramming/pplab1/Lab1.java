@@ -1,41 +1,83 @@
 package com.itzroma.kpi.semester5.parallelprogramming.pplab1;
 
 import java.util.Scanner;
+import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Паралельне програмування - Лабораторна робота №1 (ЛР1)
- * Функція - F (5) -> MA = MD * MC * d + min(Z) * MX * p
- *
- * @author Бондаренко Роман Ігорович, група ІО-03
- * @Date: 28/10/2022
+ * Паралельне програмування: Лабораторна робота №1 (ЛР1)
+ * <p>
+ * Варіант: 5
+ * <p>
+ * Функція: MA = MD * MC * d + min(Z) * MX * p
+ * <p>
+ * Автор: Бондаренко Роман Ігорович, група ІО-03
+ * <p>
+ * Дата: 03/11/2022
  */
 public class Lab1 {
-    public static final Lock INPUT_LOCK = new ReentrantLock();
-    public static final Lock M_LOCK = new ReentrantLock();
-
-    public static final Semaphore SEM_1 = new Semaphore(0);
-    public static final Semaphore SEM_2 = new Semaphore(0);
-    public static final Semaphore SEM_3 = new Semaphore(0);
-    public static final Semaphore SEM_4 = new Semaphore(0);
-    public static final Semaphore SEM_5 = new Semaphore(0);
-    public static final Semaphore SEM_6 = new Semaphore(0);
-    public static final Semaphore SEM_7 = new Semaphore(0);
-    public static final Semaphore SEM_8 = new Semaphore(0);
-    public static final Semaphore SEM_9 = new Semaphore(0);
-
-    public static final Scanner SC = new Scanner(System.in);
-
     private static final int AMOUNT_OF_PROCESSORS = 4;
 
+    /**
+     * Critical section for controlling access to the console
+     */
+    public static final Lock CS_INPUT = new ReentrantLock();
+
+    /**
+     * Barrier for controlling input from all processors (threads)
+     */
+    public static final CyclicBarrier B = new CyclicBarrier(
+            AMOUNT_OF_PROCESSORS,
+            () -> System.out.printf("%n---> All the required data was provided. Calculation started <---%n")
+    );
+
+    /**
+     * Critical section for controlling access to the shared resource 'd'
+     */
+    public static final Lock CS2 = new ReentrantLock();
+
+    /**
+     * Semaphore for controlling access to the shared resource 'm'
+     */
+    public static final Semaphore S01 = new Semaphore(1);
+
+    /**
+     * Semaphore for controlling access to the shared resource 'p'
+     */
+    public static final Semaphore S02 = new Semaphore(1);
+
+    /**
+     * Semaphore to synchronize T2, T3, T4 with the completion of the calculation of 'm' in T1
+     */
+    public static final Semaphore S1 = new Semaphore(0);
+
+    /**
+     * Semaphore to synchronize T1, T3, T4 with the completion of the calculation of 'm' in T2
+     */
+    public static final Semaphore S2 = new Semaphore(0);
+
+    /**
+     * Semaphore to synchronize T1, T2, T4 with the completion of the calculation of 'm' in T3
+     */
+    public static final Semaphore S3 = new Semaphore(0);
+
+    /**
+     * Semaphore to synchronize T1, T2, T3 with the completion of the calculation of 'm' in T4
+     */
+    public static final Semaphore S4 = new Semaphore(0);
+
+    /**
+     * Semaphore to synchronize T1 with completion of 'MAH' calculation in T2, T3, T4
+     */
+    public static final Semaphore S5 = new Semaphore(0);
+
+    public static final Scanner SCANNER = new Scanner(System.in);
+
     public static void main(String[] args) {
-        int n;
-        do {
-            System.out.printf("%nProvide the size of vectors and matrices: ");
-            n = SC.nextInt();
-        } while (!checkN(n));
+        System.out.printf("%nProvide N (the size of vectors and matrices): ");
+        int n = SCANNER.nextInt();
 
         Resources resources = new Resources(n, AMOUNT_OF_PROCESSORS);
 
@@ -62,13 +104,5 @@ public class Lab1 {
         }
 
         System.out.printf("%nAll threads finished%n");
-    }
-
-    private static boolean checkN(int n) {
-        if (n % AMOUNT_OF_PROCESSORS != 0) {
-            System.out.printf("N should be exactly divisible by %d%n", AMOUNT_OF_PROCESSORS);
-            return false;
-        }
-        return true;
     }
 }
