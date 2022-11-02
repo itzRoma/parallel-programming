@@ -115,4 +115,14 @@ public class MatrixUtils {
         Arrays.stream(elements).forEach(Arrays::sort);
         return new Matrix(elements);
     }
+
+    public static Matrix matrixScalarMultiplication(Matrix matrix, double scalar) {
+        double[][] elements = new double[matrix.elements().length][matrix.elements()[0].length];
+        for (int i = 0; i < elements.length; i++) {
+            for (int j = 0; j < elements[i].length; j++) {
+                elements[i][j] = matrix.elements()[i][j] * scalar;
+            }
+        }
+        return new Matrix(elements);
+    }
 }

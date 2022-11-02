@@ -88,4 +88,8 @@ public class VectorUtils {
                         .sum()).toArray();
         return new Vector(elements);
     }
+
+    public static double min(Vector vector) {
+        return Arrays.stream(vector.elements()).min().getAsDouble();
+    }
 }
