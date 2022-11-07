@@ -1,8 +1,10 @@
 package com.itzroma.kpi.semester5.parallelprogramming.pplab1;
 
+import com.itzroma.kpi.semester5.parallelprogramming.pputils.matrix.Matrix;
 import com.itzroma.kpi.semester5.parallelprogramming.pputils.matrix.MatrixUtils;
-import com.itzroma.kpi.semester5.parallelprogramming.pputils.vector.VectorUtils;
+import com.itzroma.kpi.semester5.parallelprogramming.pputils.vector.Vector;
 
+import java.util.Arrays;
 import java.util.concurrent.BrokenBarrierException;
 
 public class T4 extends Thread {
@@ -25,13 +27,13 @@ public class T4 extends Thread {
 
         try {
             // 1. Введення: Z, MD.
-            Lab1.CS_INPUT.lock();
-            System.out.printf("%n%s - Provide the vector 'Z'%n", getName());
-            resources.setVectorZ(VectorUtils.scanVector(resources.getN()));
+            double[] elementsZ = new double[resources.getN()];
+            Arrays.fill(elementsZ, 1.0);
+            resources.setVectorZ(new Vector(elementsZ));
 
-            System.out.printf("%n%s - Provide the matrix 'MD'%n", getName());
-            resources.setMatrixMD(MatrixUtils.scanMatrix(resources.getN()));
-            Lab1.CS_INPUT.unlock();
+            double[][] elementsMD = new double[resources.getN()][resources.getN()];
+            Arrays.stream(elementsMD).forEach(row -> Arrays.fill(row, 1.0));
+            resources.setMatrixMD(new Matrix(elementsMD));
 
             // 2. Очікувати на закінчення введення даних у інших задачах.
             Lab1.B.await();

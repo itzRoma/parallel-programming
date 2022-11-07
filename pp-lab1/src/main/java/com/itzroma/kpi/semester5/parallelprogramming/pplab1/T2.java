@@ -1,7 +1,9 @@
 package com.itzroma.kpi.semester5.parallelprogramming.pplab1;
 
+import com.itzroma.kpi.semester5.parallelprogramming.pputils.matrix.Matrix;
 import com.itzroma.kpi.semester5.parallelprogramming.pputils.matrix.MatrixUtils;
 
+import java.util.Arrays;
 import java.util.concurrent.BrokenBarrierException;
 
 public class T2 extends Thread {
@@ -24,10 +26,9 @@ public class T2 extends Thread {
 
         try {
             // 1. Введення: MX.
-            Lab1.CS_INPUT.lock();
-            System.out.printf("%n%s - Provide the matrix 'MX'%n", getName());
-            resources.setMatrixMX(MatrixUtils.scanMatrix(resources.getN()));
-            Lab1.CS_INPUT.unlock();
+            double[][] elementsMX = new double[resources.getN()][resources.getN()];
+            Arrays.stream(elementsMX).forEach(row -> Arrays.fill(row, 1.0));
+            resources.setMatrixMX(new Matrix(elementsMX));
 
             // 2. Очікувати на закінчення введення даних у інших задачах.
             Lab1.B.await();

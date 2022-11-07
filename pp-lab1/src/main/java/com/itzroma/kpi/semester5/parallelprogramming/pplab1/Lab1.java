@@ -21,16 +21,11 @@ public class Lab1 {
     private static final int AMOUNT_OF_PROCESSORS = 4;
 
     /**
-     * Critical section for controlling access to the console
-     */
-    public static final Lock CS_INPUT = new ReentrantLock();
-
-    /**
      * Barrier for controlling input from all processors (threads)
      */
     public static final CyclicBarrier B = new CyclicBarrier(
             AMOUNT_OF_PROCESSORS,
-            () -> System.out.printf("%n---> All the required data was provided. Calculation started <---%n")
+            () -> System.out.printf("%n---> All the required data was provided, calculation started <---%n")
     );
 
     /**
@@ -73,11 +68,11 @@ public class Lab1 {
      */
     public static final Semaphore S5 = new Semaphore(0);
 
-    public static final Scanner SCANNER = new Scanner(System.in);
-
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
         System.out.printf("%nProvide N (the size of vectors and matrices): ");
-        int n = SCANNER.nextInt();
+        int n = scanner.nextInt();
 
         Resources resources = new Resources(n, AMOUNT_OF_PROCESSORS);
 
@@ -87,6 +82,8 @@ public class Lab1 {
         Thread t4 = new T4(resources);
 
         System.out.printf("%nStarting threads...%n");
+
+        long start = System.currentTimeMillis();
 
         t1.start();
         t2.start();
@@ -101,8 +98,12 @@ public class Lab1 {
         } catch (InterruptedException ex) {
             System.out.printf("%nAn error occurred: %s%n", ex.getMessage());
             Thread.currentThread().interrupt();
+        } finally {
+            scanner.close();
         }
 
-        System.out.printf("%nAll threads finished%n");
+        long end = System.currentTimeMillis();
+
+        System.out.printf("%nAll threads finished, execution time is %d ms%n", end - start);
     }
 }

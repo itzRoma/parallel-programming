@@ -24,10 +24,7 @@ public class T1 extends Thread {
 
         try {
             // 1. Введення: d.
-            Lab1.CS_INPUT.lock();
-            System.out.printf("%n%s - Provide scalar 'd': ", getName());
-            resources.setScalarD(Lab1.SCANNER.nextDouble());
-            Lab1.CS_INPUT.unlock();
+            resources.setScalarD(1.0);
 
             // 2. Очікувати на закінчення введення даних у інших задачах.
             Lab1.B.await();
