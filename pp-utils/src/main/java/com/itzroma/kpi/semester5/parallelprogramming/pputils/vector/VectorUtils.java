@@ -44,6 +44,12 @@ public class VectorUtils {
         return new Vector(vector);
     }
 
+    public static Vector createVectorAndFillWithValue(int vectorSize, double value) {
+        double[] elements = new double[vectorSize];
+        Arrays.fill(elements, value);
+        return new Vector(elements);
+    }
+
     private static Vector createVectorAndFillWithValue(int vectorSize) {
         System.out.print("Enter the value you want to fill the vector with: ");
         double value = SCANNER.nextDouble();
@@ -73,7 +79,7 @@ public class VectorUtils {
     }
 
     public static Vector addVectors(Vector firstVector, Vector secondVector) {
-        final double[] elements = new double[firstVector.elements().length];
+        double[] elements = new double[firstVector.elements().length];
         for (int i = 0; i < firstVector.elements().length; i++) {
             elements[i] = firstVector.elements()[i] + secondVector.elements()[i];
         }
@@ -91,5 +97,21 @@ public class VectorUtils {
 
     public static double min(Vector vector) {
         return Arrays.stream(vector.elements()).min().getAsDouble();
+    }
+
+    public static Vector multiplyVectors(Vector firstVector, Vector secondVector) {
+        Vector result = new Vector(firstVector.elements().length);
+        for (int i = 0; i < firstVector.elements().length; i++) {
+            result.setElement(i, firstVector.getElement(i) * secondVector.getElement(i));
+        }
+        return result;
+    }
+
+    public static Vector vectorScalarMultiplication(Vector vector, double scalar) {
+        Vector result = new Vector(vector.elements().length);
+        for (int i = 0; i < vector.elements().length; i++) {
+            result.setElement(i, vector.getElement(i) * scalar);
+        }
+        return result;
     }
 }
