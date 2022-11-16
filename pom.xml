@@ -12,6 +12,7 @@
         <module>pp-utils</module>
         <module>pp-lab0</module>
         <module>pp-lab1</module>
+        <module>pp-lab3</module>
     </modules>
 
     <properties>
