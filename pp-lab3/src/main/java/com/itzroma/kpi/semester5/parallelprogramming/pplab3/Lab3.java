@@ -11,7 +11,7 @@ import java.util.Scanner;
  * <p>
  * Автор: Бондаренко Роман Ігорович, група ІО-03
  * <p>
- * Дата: 16/11/2022
+ * Дата: 17/11/2022
  */
 public class Lab3 {
     private static final int AMOUNT_OF_PROCESSORS = 4;
@@ -21,11 +21,13 @@ public class Lab3 {
         int n = new Scanner(System.in).nextInt();
 
         Resources resources = new Resources(n, AMOUNT_OF_PROCESSORS);
+        ResourcesMonitor resourcesMonitor = new ResourcesMonitor(resources);
+        SynchroMonitor synchroMonitor = new SynchroMonitor(resources);
 
-        Thread t1 = new T1(resources);
-        Thread t2 = new T2(resources);
-        Thread t3 = new T3(resources);
-        Thread t4 = new T4(resources);
+        Thread t1 = new T1(resources, resourcesMonitor, synchroMonitor);
+        Thread t2 = new T2(resources, resourcesMonitor, synchroMonitor);
+        Thread t3 = new T3(resources, resourcesMonitor, synchroMonitor);
+        Thread t4 = new T4(resources, resourcesMonitor, synchroMonitor);
 
         System.out.printf("%nStarting threads...%n");
 

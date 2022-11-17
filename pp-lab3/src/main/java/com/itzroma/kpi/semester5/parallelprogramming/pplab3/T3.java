@@ -1,15 +1,20 @@
 package com.itzroma.kpi.semester5.parallelprogramming.pplab3;
 
+import com.itzroma.kpi.semester5.parallelprogramming.pputils.MergeSort;
 import com.itzroma.kpi.semester5.parallelprogramming.pputils.matrix.MatrixUtils;
 
 public class T3 extends Thread {
     private final Resources resources;
+    private final ResourcesMonitor resourcesMonitor;
+    private final SynchroMonitor synchroMonitor;
 
     private final int start;
     private final int end;
 
-    public T3(Resources resources) {
+    public T3(Resources resources, ResourcesMonitor resourcesMonitor, SynchroMonitor synchroMonitor) {
         this.resources = resources;
+        this.resourcesMonitor = resourcesMonitor;
+        this.synchroMonitor = synchroMonitor;
         setName("T3");
 
         start = (3 - 1) * resources.getH(); // (threadNumber - 1) * H
@@ -24,10 +29,10 @@ public class T3 extends Thread {
         resources.setMatrixME(MatrixUtils.createMatrixAndFillWithValue(resources.getN(), 1));
 
         // 2. Сигнал задачам Т1, Т2, Т4 про завершення введення даних.
-        resources.signalOthersAboutCompletionOfInput();
+        synchroMonitor.signalOthersAboutCompletionOfInput();
 
         // 3. Чекати сигнал від задач Т1, Т2, Т4 про завершення введення даних.
-        resources.waitForOthersToCompleteInput();
+        synchroMonitor.waitForOthersToCompleteInput();
 
         // 4. Обчислення 1: MAh = ME * MMh.
         for (int i = 0; i < resources.getN(); i++) {
@@ -45,38 +50,49 @@ public class T3 extends Thread {
             }
         }
 
-        // 6. Обчислення 3: Fh = Bh * Ch.
+        // 6. Обчислення 3: r3 = Bh * Ch.
+        double scalarRi3 = 0;
         for (int i = start; i < end; i++) {
-            double value = resources.getVectorB().getElement(i) * resources.getVectorC().getElement(i);
-            resources.getVectorF().setElement(i, value);
+            scalarRi3 += resources.getVectorB().getElement(i) * resources.getVectorC().getElement(i);
         }
 
-        // 7. Копіювання x3 = x.
-        double scalarX3 = resources.copyScalarX();
+        // 7. Обчислення 4: r = r + r3.
+        resourcesMonitor.addToScalarR(scalarRi3);
 
-        // 8. Обчислення 4: Gh = Fh * Eh * x3.
+        // 8. Сигнал задачам Т1, Т2, Т4 про завершення обчислення r.
+        synchroMonitor.signalOthersAboutCompletionOfCalculationOfScalarR();
+
+        // 9. Чекати сигнал від задач Т1, Т2, Т4 про завершення обчислення r.
+        synchroMonitor.waitForOthersToCompleteCalculationOfScalarR();
+
+        // 10. Копіювання r3 = r.
+        double scalarR3 = resourcesMonitor.copyScalarR();
+
+        // 11. Копіювання x3 = x.
+        double scalarX3 = resourcesMonitor.copyScalarX();
+
+        // 12. Обчислення 5: Gh = r3 * Eh * x3.
         for (int i = start; i < end; i++) {
-            double value = resources.getVectorF().getElement(i) * resources.getVectorE().getElement(i) * scalarX3;
-            resources.getVectorG().setElement(i, value);
+            resources.getVectorG().setElement(i, scalarR3 * resources.getVectorE().getElement(i) * scalarX3);
         }
 
-        // 9. Обчислення 5: Ah = sort(Ah).
-        resources.sortA(start, end);
+        // 13. Обчислення 6: Ah = sort(Ah).
+        MergeSort.sortDoubles(resources.getVectorA().elements(), start, end);
 
-        // 10. Сигнал задачі Т4 про завершення сортування.
-        resources.signalT4AboutCompletionOfSortingInT3();
+        // 14. Сигнал задачі Т4 про завершення сортування.
+        synchroMonitor.signalT4AboutCompletionOfSortingInT3();
 
-        // 11. Чекати сигнал від задачі Т4 про завершення (повного) злиття.
-        resources.waitForT4ToCompleteMerging();
+        // 15. Чекати сигнал від задачі Т4 про завершення (повного) злиття.
+        synchroMonitor.waitForT4ToCompleteMerging();
 
-        // 12. Обчислення 8: Zh = Ah + Gh.
+        // 16. Обчислення 9: Zh = Ah + Gh.
         for (int i = start; i < end; i++) {
             double value = resources.getVectorA().getElement(i) + resources.getVectorG().getElement(i);
             resources.getVectorZ().setElement(i, value);
         }
 
-        // 13. Сигнал задачі Т4 про завершення обчислень.
-        resources.signalT4AboutCompletionOfCalculations();
+        // 17. Сигнал задачі Т4 про завершення обчислень.
+        synchroMonitor.signalT4AboutCompletionOfCalculations();
 
         System.out.printf("%nThread '%s' finished%n", getName());
     }

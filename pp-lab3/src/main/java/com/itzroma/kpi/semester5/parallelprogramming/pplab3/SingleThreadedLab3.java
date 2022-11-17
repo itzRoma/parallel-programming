@@ -30,7 +30,7 @@ public class SingleThreadedLab3 {
 
         Vector vectorZ = VectorUtils.addVectors(
                 VectorUtils.sorted(VectorUtils.matrixVectorMultiplication(MatrixUtils.multiplyMatrices(matrix, matrix), vector)),
-                VectorUtils.vectorScalarMultiplication(VectorUtils.multiplyVectors(VectorUtils.multiplyVectors(vector, vector), vector), scalar)
+                VectorUtils.vectorScalarMultiplication(VectorUtils.vectorScalarMultiplication(vector, VectorUtils.multiplyVectors(vector, vector)), scalar)
         );
 
         long end = System.currentTimeMillis();
