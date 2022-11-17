@@ -99,10 +99,10 @@ public class VectorUtils {
         return Arrays.stream(vector.elements()).min().getAsDouble();
     }
 
-    public static Vector multiplyVectors(Vector firstVector, Vector secondVector) {
-        Vector result = new Vector(firstVector.elements().length);
+    public static double multiplyVectors(Vector firstVector, Vector secondVector) {
+        double result = 0;
         for (int i = 0; i < firstVector.elements().length; i++) {
-            result.setElement(i, firstVector.getElement(i) * secondVector.getElement(i));
+            result += firstVector.getElement(i) * secondVector.getElement(i);
         }
         return result;
     }
