@@ -43,6 +43,14 @@ public class MatrixUtils {
         return new Matrix(matrix);
     }
 
+    public static Matrix createMatrixAndFillWithValue(int matrixSize, double value) {
+        double[][] elements = new double[matrixSize][matrixSize];
+        for (double[] row : elements) {
+            Arrays.fill(row, value);
+        }
+        return new Matrix(elements);
+    }
+
     private static Matrix createMatrixAndFillWithValue(int matrixSize) {
         double[][] elements = new double[matrixSize][matrixSize];
 
