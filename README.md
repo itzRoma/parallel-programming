@@ -9,5 +9,8 @@ P.S.: lab2 is written in C#, so it can't be placed in this repo. You can find la
 
 lab3: passed (A).
 
-Lab4: passed (A).<br/>
+lab4: passed (A).<br/>
 P.S.: lab4 is written in C++, so it can't be placed in this repo. You can find lab4 [here](https://github.com/itzRoma/pp-lab4).
+
+lab5: passed (A).<br/>
+P.S.: lab5 is written in C++, so it can't be placed in this repo. You can find lab5 [here](https://github.com/itzRoma/pp-lab5).
